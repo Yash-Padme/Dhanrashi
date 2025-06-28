@@ -9,10 +9,13 @@ const Home = async ({ searchParams: { id, page } }: SearchParamProps) => {
   const currentPage = Number(page as string) || 1;
   const loggedIn = await getLoggedInUser();
   const accounts = await getAccounts({ 
-    userId: loggedIn.$id 
+    userId: loggedIn
   })
 
-  if(!accounts) return;
+  if (!accounts) {
+    return <div className="text-center p-4">No accounts found.</div>;
+  }
+  
   
   const accountsData = accounts?.data;
   const appwriteItemId = (id as string) || accountsData[0]?.appwriteItemId;
@@ -25,7 +28,7 @@ const Home = async ({ searchParams: { id, page } }: SearchParamProps) => {
         <header className="home-header">
           <HeaderBox 
             type="greeting"
-            title="Welcome"
+            title="Welcome bhai"
             user={loggedIn?.firstName || 'Guest'}
             subtext="Access and manage your account and transactions efficiently."
           />
@@ -54,4 +57,4 @@ const Home = async ({ searchParams: { id, page } }: SearchParamProps) => {
   )
 }
 
-export default Home
+export default Home  //home page

@@ -9,6 +9,7 @@ import { CountryCode, ProcessorTokenCreateRequest, ProcessorTokenCreateRequestPr
 import { plaidClient } from '@/lib/plaid';
 import { revalidatePath } from "next/cache";
 import { addFundingSource, createDwollaCustomer } from "./dwolla.actions";
+import { User } from "lucide-react";
 
 const {
   APPWRITE_DATABASE_ID: DATABASE_ID,
@@ -43,10 +44,10 @@ export const signIn = async ({ email, password }: signInProps) => {
       sameSite: "strict",
       secure: true,
     });
-
+   
     const user = await getUserInfo({ userId: session.userId }) 
 
-    return parseStringify(user);
+    return parseStringify(User);
   } catch (error) {
     console.error('Error', error);
   }
@@ -105,19 +106,27 @@ export const signUp = async ({ password, ...userData }: SignUpParams) => {
   }
 }
 
+const fallbackUser = {
+  _id: "demo-user-id",
+  firstName: "Yash",
+  email: "yash@example.com",
+};
 export async function getLoggedInUser() {
   try {
     const { account } = await createSessionClient();
     const result = await account.get();
+    console.log("Session user from Appwrite:", result);
 
-    const user = await getUserInfo({ userId: result.$id})
+    const user = await getUserInfo({ userId: result.$id });
+    console.log("User info from DB:", user);
 
     return parseStringify(user);
   } catch (error) {
-    console.log(error)
+    console.log("getLoggedInUser error:", error);
     return null;
   }
 }
+
 
 export const logoutAccount = async () => {
   try {

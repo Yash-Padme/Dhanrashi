@@ -27,6 +27,11 @@ const CategoryBadge = ({ category }: CategoryBadgeProps) => {
 } 
 
 const TransactionsTable = ({ transactions }: TransactionTableProps) => {
+  // Check if transactions is defined and is an array
+  if (!Array.isArray(transactions)) {
+    return <div>No transactions available.</div>; // Or any other fallback message/component
+  }
+
   return (
     <Table>
       <TableHeader className="bg-[#f9fafb]">
@@ -58,9 +63,7 @@ const TransactionsTable = ({ transactions }: TransactionTableProps) => {
               </TableCell>
 
               <TableCell className={`pl-2 pr-10 font-semibold ${
-                isDebit || amount[0] === '-' ?
-                  'text-[#f04438]'
-                  : 'text-[#039855]'
+                isDebit || amount[0] === '-' ? 'text-[#f04438]' : 'text-[#039855]'
               }`}>
                 {isDebit ? `-${amount}` : isCredit ? amount : amount}
               </TableCell>
@@ -74,18 +77,18 @@ const TransactionsTable = ({ transactions }: TransactionTableProps) => {
               </TableCell>
 
               <TableCell className="pl-2 pr-10 capitalize min-w-24">
-               {t.paymentChannel}
+                {t.paymentChannel}
               </TableCell>
 
               <TableCell className="pl-2 pr-10 max-md:hidden">
-               <CategoryBadge category={t.category} /> 
+                <CategoryBadge category={t.category} /> 
               </TableCell>
             </TableRow>
           )
         })}
       </TableBody>
     </Table>
-  )
-}
+  );
+};
 
-export default TransactionsTable
+export default TransactionsTable;
